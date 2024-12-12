@@ -1,0 +1,8 @@
+jobs:
+  lint:
+    runs-on: "ubuntu-24.04"
+    steps:
+      - uses: "actions/checkout@v4"
+      - run: "rustup component add rustfmt"
+      - run: "cargo fmt --check --manifest-path native/deno_rider/Cargo.toml"
+on: ["push"]

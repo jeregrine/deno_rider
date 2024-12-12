@@ -1,0 +1,54 @@
+env:
+  DENO_RIDER_BUILD: true
+  MIX_ENV: "test"
+jobs:
+  test:
+    runs-on: "ubuntu-24.04"
+    steps:
+      - uses: "actions/checkout@v4"
+      - id: "setup-beam"
+        uses: "erlef/setup-beam@v1"
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - id: "mix-cache"
+        uses: "actions/cache@v3"
+        with:
+          key: "${{ runner.os }}-${{ steps.setup-beam.outputs.otp-version }}-${{ steps.setup-beam.outputs.elixir-version }}-${{ hashFiles('mix.lock') }}"
+          path: |
+            deps
+            _build
+      - if: "steps.mix-cache.outputs.cache-hit != 'true'"
+        run: |
+          mix do local.hex --force, local.rebar --force, deps.get
+          mix compile
+      - if: matrix.elixir == '1.17.3'
+        run: "mix deps.unlock --check-unused"
+      - if: matrix.elixir == '1.17.3'
+        run: "mix credo suggest --strict"
+      - if: matrix.elixir == '1.17.3'
+        run: "mix format --check-formatted"
+      - id: "plt-cache"
+        uses: "actions/cache@v3"
+        with:
+          key: "${{ runner.os }}-${{ steps.setup-beam.outputs.otp-version }}-${{ steps.setup-beam.outputs.elixir-version }}-plt"
+          path: |
+            priv/plts
+      - if: "steps.plt-cache.outputs.cache-hit != 'true'"
+        run: "mix dialyzer --plt"
+      - run: "mix dialyzer --format github"
+      - run: "mix test --include panic"
+      - run: "mix test --only benchmark"
+    strategy:
+      matrix:
+        elixir: ["1.14.5", "1.15.8", "1.16.3", "1.17.3"]
+        include:
+          - elixir: "1.14.5"
+            otp: "26"
+          - elixir: "1.15.8"
+            otp: "26"
+          - elixir: "1.16.3"
+            otp: "26"
+          - elixir: "1.17.3"
+            otp: "27"
+on: ["push"]
