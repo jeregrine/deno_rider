@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: "actions/checkout@v4"
       - run: |
-          echo "PROJECT_VERSION=$(sed -n 's/^  @version "\(.*\)"/\1/p' mix.exs | head -n1)" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(sed -n 's/^      version: "\(.*\)"/\1/p' mix.exs)" >> $GITHUB_ENV
       - uses: "dtolnay/rust-toolchain@1.82.0"
         with:
           target: ${{ matrix.job.target }}
