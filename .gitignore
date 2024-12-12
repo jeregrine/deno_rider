@@ -1,4 +1,5 @@
 /_build
+/checksum-Elixir.DenoRider.Native.exs
 /deps
 /doc
 /priv/native

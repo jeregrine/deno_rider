@@ -30,7 +30,7 @@ defmodule DenoRider.MixProject do
       name: "DenoRider",
       package: [
         files: [
-          "checksum-*.exs",
+          "checksum-Elixir.DenoRider.Native.exs",
           "LICENSE",
           "lib",
           "native",
