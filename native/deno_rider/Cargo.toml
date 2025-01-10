@@ -16,4 +16,4 @@ path = "src/lib.rs"
 [package]
 edition = "2021"
 name = "deno_rider"
-version = "0.1.0"
+version = "0.1.1"
