@@ -78,6 +78,30 @@ iex> DenoRider.stop_runtime(runtime) |> Task.await()
 Read the [full documentation](https://hexdocs.pm/deno_rider/DenoRider.html) for
 more information.
 
+## FAQ
+
+### When should I use DenoRider?
+
+If you need to run JavaScript from Elixir, you can give DenoRider a try. Some
+common use cases for that is for example server-side rendering of React or
+wrapping a JavaScript library in Elixir.
+
+### What makes DenoRider different from other ways of calling JavaScript from Elixir?
+
+Since DenoRider embeds the Deno runtime, you don't need any external executables
+(such as `node`) and the latency for your JavaScript calls is very low.
+
+### When shouldn't I use DenoRider?
+
+One reason could be that you want to use another JavaScript runtime, such as
+Node or Bun. Or if you want to use Deno features that DenoRider doesn't provide.
+
+### What are some common pitfalls?
+
+There's currently no npm integration, which means that if you want to use an npm
+package you first need to convert it into something that's consumable by
+DenoRider. To do that you can use [Rollup](https://rollupjs.org), for example.
+
 ## License
 
 DenoRider is released under the MIT license. See the [LICENSE](LICENSE) file for
