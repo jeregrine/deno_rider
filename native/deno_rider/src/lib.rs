@@ -72,7 +72,7 @@ fn eval(
     env: Env,
     from: rustler::Term,
     resource: ResourceArc<runtime::Runtime>,
-    message: String,
+    code: String,
 ) -> rustler::Atom {
     let pid = env.pid();
     let worker_sender = resource.worker_sender.clone();
@@ -81,7 +81,7 @@ fn eval(
     tokio_runtime::get().spawn(async move {
         let (response_sender, response_receiver) = tokio::sync::oneshot::channel();
         let result = if worker_sender
-            .send(worker::Message::Execute(message, response_sender))
+            .send(worker::Message::Eval(code, response_sender))
             .is_ok()
         {
             match response_receiver.await {
@@ -107,12 +107,12 @@ fn eval(
 #[rustler::nif]
 fn eval_blocking(
     resource: ResourceArc<runtime::Runtime>,
-    message: String,
+    code: String,
 ) -> Result<String, error::Error> {
     let (response_sender, response_receiver) = tokio::sync::oneshot::channel();
     resource
         .worker_sender
-        .send(worker::Message::Execute(message, response_sender))
+        .send(worker::Message::Eval(code, response_sender))
         .or(Err(error::Error {
             message: None,
             name: atoms::dead_runtime_error(),

@@ -4,7 +4,7 @@ use deno_runtime::worker::MainWorker;
 use tokio::sync::oneshot::Sender;
 
 pub enum Message {
-    Execute(String, Sender<Result<String, Error>>),
+    Eval(String, Sender<Result<String, Error>>),
     Stop(Sender<()>),
 }
 
@@ -68,7 +68,7 @@ pub async fn run(
                         response_sender.send(()).unwrap();
                         break;
                     },
-                    Message::Execute(code, response_sender) => {
+                    Message::Eval(code, response_sender) => {
                         match worker.execute_script("<anon>", code.into()) {
                             Ok(global) => {
                                 let scope = &mut worker.js_runtime.handle_scope();
