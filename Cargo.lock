@@ -1403,7 +1403,6 @@ dependencies = [
  "deno_core",
  "deno_fs",
  "deno_runtime",
- "once_cell",
  "rustler",
  "serde_json",
  "serde_v8",
