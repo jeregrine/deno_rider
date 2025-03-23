@@ -17,23 +17,28 @@ deno_core::extension!(
 pub async fn new(main_module_path: String) -> Result<MainWorker, Error> {
     let path = std::env::current_dir().unwrap().join(main_module_path);
     let main_module = deno_core::ModuleSpecifier::from_file_path(path).unwrap();
-    let fs = std::sync::Arc::new(deno_fs::RealFs);
-    let descriptor_parser = std::sync::Arc::new(
-        deno_runtime::permissions::RuntimePermissionDescriptorParser::new(fs.clone()),
-    );
     let mut worker = MainWorker::bootstrap_from_options(
-        main_module.clone(),
-        deno_runtime::worker::WorkerServiceOptions {
+        &main_module,
+        deno_runtime::worker::WorkerServiceOptions::<
+            deno_resolver::npm::DenoInNpmPackageChecker,
+            deno_resolver::npm::NpmResolver<sys_traits::impls::RealSys>,
+            sys_traits::impls::RealSys,
+        > {
             blob_store: Default::default(),
             broadcast_channel: Default::default(),
             compiled_wasm_module_store: Default::default(),
             feature_checker: Default::default(),
-            fs,
+            fetch_dns_resolver: Default::default(),
+            fs: std::sync::Arc::new(deno_fs::RealFs),
             module_loader: std::rc::Rc::new(deno_core::FsModuleLoader),
             node_services: Default::default(),
             npm_process_state_provider: Default::default(),
             permissions: deno_runtime::deno_permissions::PermissionsContainer::allow_all(
-                descriptor_parser,
+                std::sync::Arc::new(
+                    deno_runtime::permissions::RuntimePermissionDescriptorParser::new(
+                        sys_traits::impls::RealSys,
+                    ),
+                ),
             ),
             root_cert_store_provider: Default::default(),
             shared_array_buffer_store: Default::default(),
