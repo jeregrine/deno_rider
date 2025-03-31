@@ -9,7 +9,7 @@ JavaScript in Elixir and it doesn't depend on external executables.
 Add `:deno_rider` to your `mix.exs`:
 
 ```elixir
-{:deno_rider, "~> 0.1"}
+{:deno_rider, "~> 0.2"}
 ```
 
 Add `DenoRider` to your application's supervisor:
