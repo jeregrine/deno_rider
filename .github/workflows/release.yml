@@ -15,7 +15,6 @@ jobs:
         uses: "philss/rustler-precompiled-action@v1.1.4"
         with:
           nif-version: ${{ matrix.nif }}
-          project-dir: "native/deno_rider"
           project-name: "deno_rider"
           project-version: ${{ env.PROJECT_VERSION }}
           target: ${{ matrix.job.target }}
