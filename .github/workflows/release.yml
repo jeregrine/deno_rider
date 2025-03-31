@@ -47,3 +47,4 @@ jobs:
 on:
   push:
     tags: ["*"]
+  workflow_dispatch:
