@@ -87,7 +87,7 @@ function.
 #### `DenoRider.apply`
 
 Call an Elixir or Erlang function from JavaScript. Similarly to
-[`Kernel.apply/3`](https://hexdocs.pm/elixir/Kernel.html#apply/3), it take a
+[`Kernel.apply/3`](https://hexdocs.pm/elixir/Kernel.html#apply/3), it takes a
 module, a function and an array of arguments:
 
 ```javascript
