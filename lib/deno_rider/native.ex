@@ -22,7 +22,7 @@ defmodule DenoRider.Native do
       "x86_64-unknown-linux-gnu"
     ],
     variants: %{
-      "x86_64-unknown-linux-gnu" => [use_old_glibc: use_old_glibc]
+      "x86_64-unknown-linux-gnu" => [use_old_glibc: fn -> use_old_glibc end]
     },
     version: version
 
